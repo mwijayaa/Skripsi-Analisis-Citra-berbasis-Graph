@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Input Image</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+<div class="container" align="center">
+    <div class="jumbotron">
+    <h1>Image Retrieval</h1>
+    </div>
+    <hr>
+    <form id="upload-form" action="{{ url_for('process') }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+    <!-- <div class="container" align="left">   -->  
+    <input id="file-picker" class="custom-file-input" class="btn btn-default" type="file" name="file" accept="image/jpg" multiple>
+    <span class="custom-file-control"></span>
+    <br><br>
+    <!-- </div> -->
+    <div id="msg"></div>
+    <img id="img1" src="/static/noimg.png" width="300" height="300" class="img-thumbnail">
+    <br><br>
+    <input type="submit" name="submit" value="Segment" class="btn btn-default">
+    <input type="submit" name="submit" value="Search" class="btn btn-primary">
+</div>
+</body>
+<script>
+
+    $("#file-picker").change(function(){
+
+        var input = document.getElementById('file-picker');
+        var fullPath = document.getElementById('file-picker').value;
+        if (fullPath) {
+            var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+            var filename = fullPath.substring(startIndex);
+            if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                filename = filename.substring(1);
+            }
+            alert(filename);
+        }
+
+
+        for (var i=0; i<input.files.length; i++)
+        {
+        //koala.jpg, koala.JPG substring(index) lastIndexOf('a') koala.1.jpg
+            var ext= input.files[i].name.substring(input.files[i].name.lastIndexOf('.')+1).toLowerCase()
+
+            if ((ext == 'jpg') || (ext == 'png'))
+            {
+                $("#msg").text("Files are supported")
+                document.getElementById("img1").src = "/static/"+filename;
+            }
+            else
+            {
+                $("#msg").text("Files are NOT supported")                
+                document.getElementById("img1").src = "/static/noimg.png"
+            }
+
+        }
+
+
+    } );
+
+</script>
+</html>
